@@ -9,6 +9,8 @@ import org.springframework.kafka.annotation.EnableKafka
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory
 import org.springframework.kafka.core.ConsumerFactory
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory
+import org.springframework.kafka.listener.ContainerProperties
+import org.springframework.kafka.listener.DefaultErrorHandler
 
 @Configuration
 @EnableKafka
@@ -27,6 +29,7 @@ class KafkaConsumerConfig {
         props[ConsumerConfig.GROUP_ID_CONFIG] = groupId
         props[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         props[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
+        ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG to false
         return props
     }
 
@@ -39,6 +42,8 @@ class KafkaConsumerConfig {
     fun kafkaListenerContainerFactory(): ConcurrentKafkaListenerContainerFactory<String, String> {
         val factory = ConcurrentKafkaListenerContainerFactory<String, String>()
         factory.consumerFactory = consumerFactory()
+        factory.containerProperties.ackMode = ContainerProperties.AckMode.MANUAL
+        factory.setCommonErrorHandler(DefaultErrorHandler())
         return factory
     }
 }

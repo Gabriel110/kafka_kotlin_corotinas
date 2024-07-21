@@ -5,10 +5,12 @@ spring:
     consumer:
       group-id: ecs-ppt4-conta
       topic: comando-abrir-conta
-    producer:
+      enable-auto-commit: false  # Desabilita o commit automático
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
-
+api:
+  base-url:
+    pessoa: http://localhost:3000
 
 management:
   endpoints:
