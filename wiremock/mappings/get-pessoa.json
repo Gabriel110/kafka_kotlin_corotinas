@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/pessoa",
+    "headers": {
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"nome\":\"gabriel\",\"cpf\":\"91802388664\",\"dataNascimento\":\"06-12-1996\"}",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

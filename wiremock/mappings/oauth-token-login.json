@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/oauth/token",
+    "headers": {
+      "Content-Type": {
+        "equalTo": "application/x-www-form-urlencoded"
+      },
+      "x-gcs-apikey": {
+        "equalTo": "d97a2a44-7dec-4dcf-bcc7-3df1d41b7dd6"
+      },
+      "x-gcs-flowID": {
+        "matches": "^[a-fA-F0-9-]{36}$"
+      },
+      "x-gcs-correlationID": {
+        "matches": "^[a-fA-F0-9-]{36}$"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "matches": "^(grant_type=client_credentials*&client_secret=[^&]*&client_id=[^&]*|grant_type=[^&]*&client_id=[^&]*&client_secret=[^&]*|client_secret=[^&]*&grant_type=[^&]*&client_id=[^&]*|client_secret=[^&]*&client_id=[^&]*&grant_type=[^&]*|client_id=[^&]*&grant_type=[^&]*&client_secret=[^&]*|client_id=[^&]*&client_secret=[^&]*&grant_type=[^&]*)$"
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"access_token\":\"mockedAccessToken\",\"token_type\":\"Bearer\",\"expires_in\":300,\"refresh_token\":\"mockedAccessToken\",\"active\":true}",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

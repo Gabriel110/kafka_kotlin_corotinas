@@ -20,7 +20,6 @@ class KafkaMessageListener(
 ) {
 
     private val logger: Logger = LoggerFactory.getLogger(KafkaMessageListener::class.java)
-    private val scope = CoroutineScope(Dispatchers.IO)
 
     companion object {
         val correlation = UUID.randomUUID().toString()

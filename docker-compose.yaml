@@ -117,5 +117,15 @@ services:
     environment:
       KAFKA_BROKERCONNECT: broker:29092
 
+  wiremock:
+    image: rodolpheche/wiremock
+    networks:
+      - integration
+    ports:
+      - "3000:8080"
+    volumes:
+      - ./wiremock/mappings:/home/wiremock/mappings
+      - ./wiremock/__files:/home/wiremock/__files
+
 networks:
   integration:
