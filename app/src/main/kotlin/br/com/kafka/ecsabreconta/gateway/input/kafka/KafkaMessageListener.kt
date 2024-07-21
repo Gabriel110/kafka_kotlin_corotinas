@@ -2,6 +2,10 @@ package br.com.kafka.ecsabreconta.gateway.input.kafka
 
 import br.com.kafka.ecsabreconta.core.gateway.output.client.usecase.DadosPessoasService
 import br.com.kafka.ecsabreconta.shared.exception.DadosClienteException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.annotation.KafkaListener
@@ -15,25 +19,32 @@ class KafkaMessageListener(
 ) {
 
     private val logger: Logger = LoggerFactory.getLogger(KafkaMessageListener::class.java)
+    private val scope = CoroutineScope(Dispatchers.IO)
 
     companion object {
         val correlation = UUID.randomUUID().toString()
     }
 
-    @KafkaListener(topics = ["\${spring.kafka.consumer.topic}"])
+    @KafkaListener(
+        topics = ["\${spring.kafka.consumer.topic}"],
+        groupId = "\${spring.kafka.consumer.group-id}"
+    )
     fun listen(message: String, acknowledgment: Acknowledgment) {
-        runCatching {
-            val dadosPessoalResponse = dadosPessoasService.getDados()
-            logger.info(dadosPessoalResponse.toString())
-            logger.info("Recebido: $message")
-        }.onFailure { exception ->
-            when(exception){
-                is DadosClienteException -> {
-                    logger.error("DadosPessoasServiceImp::getDados ${exception.message}, correlatioId: $correlation")
-                } else -> logger.error("Erro ao consultar pessoa: ${exception.message}, correlatioId: $correlation", exception)
+        scope.launch {
+            runCatching {
+                val dadosPessoalResponse = dadosPessoasService.getDados()
+                logger.info(dadosPessoalResponse.toString())
+                logger.info("Recebido: $message")
+                delay(1000)
+            }.onFailure { exception ->
+                when(exception){
+                    is DadosClienteException -> {
+                        logger.error("DadosPessoasServiceImp::getDados ${exception.message}, correlatioId: $correlation")
+                    } else -> logger.error("Erro ao consultar pessoa: ${exception.message}, correlatioId: $correlation", exception)
+                }
+            }.onSuccess {
+                acknowledgment.acknowledge()
             }
-        }.onSuccess {
-            acknowledgment.acknowledge()
         }
     }
 }
