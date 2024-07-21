@@ -6,6 +6,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.annotation.KafkaListener
@@ -29,12 +30,12 @@ class KafkaMessageListener(
         topics = ["\${spring.kafka.consumer.topic}"],
         groupId = "\${spring.kafka.consumer.group-id}"
     )
-    fun listen(message: String, acknowledgment: Acknowledgment) {
+    fun listen(message: ConsumerRecord<String, String>, acknowledgment: Acknowledgment) {
         scope.launch {
             runCatching {
                 val dadosPessoalResponse = dadosPessoasService.getDados()
                 logger.info(dadosPessoalResponse.toString())
-                logger.info("Recebido: $message")
+                logger.info("Recebido: ${message.value()}")
                 delay(1000)
             }.onFailure { exception ->
                 when(exception){
