@@ -1,7 +1,12 @@
 {
   "request": {
     "method": "GET",
-    "url": "/pessoa",
+    "urlPathPattern": "/pessoa",
+    "queryParameters": {
+      "nome": {
+        "equalTo": "gabriel"
+      }
+    },
     "headers": {
       "Content-Type": {
         "equalTo": "application/json"

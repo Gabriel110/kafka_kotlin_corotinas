@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPathPattern": "/pessoa",
+    "queryParameters": {
+      "nome": {
+        "doesNotMatch": "gabriel"
+      }
+    },
+    "headers": {
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    }
+  },
+  "response": {
+    "status": 404,
+    "body": "Not Found",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
