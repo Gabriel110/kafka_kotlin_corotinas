@@ -1,6 +1,8 @@
 package br.com.kafka.ecsabreconta.gateway.input.kafka
 
 import br.com.kafka.ecsabreconta.core.gateway.output.client.usecase.DadosPessoasService
+import br.com.kafka.ecsabreconta.core.gateway.output.client.usecase.impl.AuthServiceImp
+import br.com.kafka.ecsabreconta.shared.exception.AuthClienteException
 import br.com.kafka.ecsabreconta.shared.exception.DadosClienteException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +18,8 @@ import java.util.*
 
 @Component
 class KafkaMessageListener(
-    private val dadosPessoasService: DadosPessoasService
+    private val dadosPessoasService: DadosPessoasService,
+    private val authServiceImp: AuthServiceImp
 ) {
 
     private val logger: Logger = LoggerFactory.getLogger(KafkaMessageListener::class.java)
@@ -30,17 +33,25 @@ class KafkaMessageListener(
         groupId = "\${spring.kafka.consumer.group-id}"
     )
     suspend fun listen(message: ConsumerRecord<String, String>, acknowledgment: Acknowledgment) {
-//        scope.launch {
         withContext(Dispatchers.IO) {
             runCatching {
                 val dadosPessoalResponse = dadosPessoasService.getDados()
+                val authClientResponse = authServiceImp.getToken(
+                    "123",
+                    "233"
+                )
+                logger.info(authClientResponse.toString())
                 logger.info(dadosPessoalResponse.toString())
                 logger.info("Recebido: ${message.value()}")
             }.onFailure { exception ->
                 when (exception) {
                     is DadosClienteException -> {
                         logger.error("DadosPessoasServiceImp::getDados ${exception.message}, correlatioId: $correlation")
-                    }else -> logger.error(
+                    }
+                    is AuthClienteException -> {
+                        logger.error("AuthServiceImp::getToken ${exception.message}, correlatioId: $correlation")
+                    }
+                    else -> logger.error(
                         "Erro ao consultar pessoa: ${exception.message}, correlatioId: $correlation",
                         exception
                     )

@@ -1,6 +1,8 @@
 package br.com.kafka.ecsabreconta.config
 
+import br.com.kafka.ecsabreconta.core.gateway.output.client.AuthClient
 import br.com.kafka.ecsabreconta.core.gateway.output.client.DadosPessoalClient
+import br.com.kafka.ecsabreconta.core.gateway.output.client.response.TokenResponse
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -36,5 +38,24 @@ class NetworkConfig(
             .client(client)
             .build()
             .create(DadosPessoalClient::class.java)
+    }
+
+    @Bean
+    fun authClientBean(
+        @Value("\${api.base-url.pessoa}") baseUrl: String
+    ): AuthClient {
+        val client = OkHttpClient.Builder()
+            .connectTimeout(timeOut, TimeUnit.SECONDS)
+            .readTimeout(timeOut, TimeUnit.SECONDS)
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.HEADERS
+            }).build()
+        val gson = GsonBuilder().create()
+        return Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .client(client)
+            .build()
+            .create(AuthClient::class.java)
     }
 }

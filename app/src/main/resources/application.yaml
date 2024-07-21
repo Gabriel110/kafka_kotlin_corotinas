@@ -9,6 +9,8 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
 api:
+  header:
+    api-key: "d97a2a44-7dec-4dcf-bcc7-3df1d41b7dd6"
   base-url:
     pessoa: http://localhost:3000
   time:
@@ -19,3 +21,8 @@ management:
     web:
       exposure:
         include: [ "prometheus" ]
+
+#logging:
+#  level:
+#    org:
+#      springframework: DEBUG
