@@ -1,0 +1,27 @@
+# Crie um diretório para armazenar os certificados
+#Use o git bash
+mkdir certs && cd certs
+
+# Gerar uma chave privada para o CA
+openssl genrsa -out ca-key.pem 2048
+
+# Gerar um certificado autoassinado para o CA
+openssl req -new -x509 -key ca-key.pem -out ca-cert.pem -days 365 -subj "//CN=CA"
+
+# Gerar uma chave privada para o Kafka
+openssl genrsa -out kafka.server.key 2048
+
+# Gerar uma solicitação de assinatura de certificado (CSR) para o Kafka
+openssl req -new -key kafka.server.key -out kafka.server.csr -subj "//CN=kafka-server"
+
+# Assinar o certificado do Kafka usando o CA
+openssl x509 -req -in kafka.server.csr -CA ca-cert.pem -CAkey ca-key.pem -CAcreateserial -out kafka.server.crt -days 365
+
+# Gerar uma chave privada para o Zookeeper (opcional)
+openssl genrsa -out zookeeper.server.key 2048
+
+# Gerar uma solicitação de assinatura de certificado (CSR) para o Zookeeper (opcional)
+openssl req -new -key zookeeper.server.key -out zookeeper.server.csr -subj "//CN=zookeeper-server"
+
+# Assinar o certificado do Zookeeper usando o CA (opcional)
+openssl x509 -req -in zookeeper.server.csr -CA ca-cert.pem -CAkey ca-key.pem -CAcreateserial -out zookeeper.server.crt -days 365
