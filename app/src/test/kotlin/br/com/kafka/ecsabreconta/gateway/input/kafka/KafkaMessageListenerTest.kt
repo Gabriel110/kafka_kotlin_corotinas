@@ -32,7 +32,8 @@ class KafkaMessageListenerTest{
         `when`(dadosPessoasService.getDados()).thenThrow(
             DadosClienteException(
                 message = "Forbidden",
-                statusCode = 403
+                statusCode = 403,
+                errorBody = ""
             )
         )
         kafkaMessageListener.listen("Test Message", acknowledgment)

@@ -11,6 +11,8 @@ spring:
 api:
   base-url:
     pessoa: http://localhost:3000
+  time:
+    ms: 10
 
 management:
   endpoints:
