@@ -42,13 +42,12 @@ class KafkaMessageListenerTest{
         val record = ConsumerRecord("my-topic", 0, 0, "key", "Test Message")
         kafkaMessageListener.listen(record, acknowledgment)
 
-        advanceTimeBy(1000)
         verify(dadosPessoasService).getDados()
-        verify(acknowledgment, times(0)).acknowledge()
+        verify(acknowledgment).acknowledge()
     }
 
     @Test
-    fun `test exception handling in message processing`() {
+    fun `test exception handling in message processing`() = runTest {
         `when`(dadosPessoasService.getDados()).thenThrow(
             DadosClienteException(
                 message = "Forbidden",

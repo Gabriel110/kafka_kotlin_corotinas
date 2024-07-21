@@ -5,7 +5,7 @@ import br.com.kafka.ecsabreconta.shared.exception.DadosClienteException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -30,18 +30,21 @@ class KafkaMessageListener(
         topics = ["\${spring.kafka.consumer.topic}"],
         groupId = "\${spring.kafka.consumer.group-id}"
     )
-    fun listen(message: ConsumerRecord<String, String>, acknowledgment: Acknowledgment) {
-        scope.launch {
+    suspend fun listen(message: ConsumerRecord<String, String>, acknowledgment: Acknowledgment) {
+//        scope.launch {
+        withContext(Dispatchers.IO) {
             runCatching {
                 val dadosPessoalResponse = dadosPessoasService.getDados()
                 logger.info(dadosPessoalResponse.toString())
                 logger.info("Recebido: ${message.value()}")
-                delay(1000)
             }.onFailure { exception ->
-                when(exception){
+                when (exception) {
                     is DadosClienteException -> {
                         logger.error("DadosPessoasServiceImp::getDados ${exception.message}, correlatioId: $correlation")
-                    } else -> logger.error("Erro ao consultar pessoa: ${exception.message}, correlatioId: $correlation", exception)
+                    }else -> logger.error(
+                        "Erro ao consultar pessoa: ${exception.message}, correlatioId: $correlation",
+                        exception
+                    )
                 }
             }.onSuccess {
                 acknowledgment.acknowledge()
