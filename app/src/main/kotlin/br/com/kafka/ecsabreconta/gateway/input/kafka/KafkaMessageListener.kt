@@ -37,8 +37,8 @@ class KafkaMessageListener(
             runCatching {
                 val dadosPessoalResponse = dadosPessoasService.getDados()
                 val authClientResponse = authServiceImp.getToken(
-                    "123",
-                    "233"
+                    "ae0a1bfa-f3e6-490a-b6d9-7a9ce4d0e551",
+                    "3a547506-9421-4c78-afad-ce94c54e4baa"
                 )
                 logger.info(authClientResponse.toString())
                 logger.info(dadosPessoalResponse.toString())
