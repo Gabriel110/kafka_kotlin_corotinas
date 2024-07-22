@@ -10,11 +10,11 @@ import retrofit2.Response
 class AuthServiceImp(
     private val authClient: AuthClient
 ) {
-    fun getToken(clientId: String, clientSercret:String): TokenResponse? {
-       val response =  authClient.getToken(
-            apiKey = "d97a2a44-7dec-4dcf-bcc7-3df1d41b7dd6",
+    fun getToken(clientId: String, clientSercret: String): TokenResponse? {
+        val response = authClient.getToken(
             clientId = clientId,
-            clientSecret = clientSercret
+            clientSecret = clientSercret,
+            apiKey = "d97a2a44-7dec-4dcf-bcc7-3df1d41b7dd6"
         ).execute()
         return response.checkSuccess().body()
     }

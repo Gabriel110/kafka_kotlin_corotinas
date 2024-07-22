@@ -16,9 +16,9 @@ interface AuthClient {
     fun getToken(
         @Header("x-gcs-correlationID") correlationID: String = UUID.randomUUID().toString(),
         @Header("x-gcs-flowID") flowID: String = UUID.randomUUID().toString(),
-        @Field("grant_type") grantType: String = "client_credentials",
-        @Field("client_id") clientId: String,
         @Header("x-gcs-apikey") apiKey: String,
-        @Field("client_secret") clientSecret: String
+        @Field("client_id") clientId: String,
+        @Field("client_secret") clientSecret: String,
+        @Field("grant_type") grantType: String = "client_credentials",
     ): Call<TokenResponse>
 }

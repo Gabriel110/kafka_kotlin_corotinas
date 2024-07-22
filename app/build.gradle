@@ -35,7 +35,10 @@ dependencies {
 	implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC'
 	implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-reactor'
 
-	testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0-RC")
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
+	implementation 'com.github.ben-manes.caffeine:caffeine'
+
+	testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0-RC'
 	testImplementation 'org.mockito:mockito-core:5.0.0'
 	testImplementation 'org.mockito:mockito-inline:5.0.0'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
