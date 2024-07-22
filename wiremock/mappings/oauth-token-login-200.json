@@ -18,7 +18,7 @@
     },
     "bodyPatterns": [
       {
-        "matches": "^(grant_type=client_credentials*&client_secret=[^&]*&client_id=[^&]*|grant_type=[^&]*&client_id=[^&]*&client_secret=[^&]*|client_secret=[^&]*&grant_type=[^&]*&client_id=[^&]*|client_secret=[^&]*&client_id=[^&]*&grant_type=[^&]*|client_id=[^&]*&grant_type=[^&]*&client_secret=[^&]*|client_id=[^&]*&client_secret=[^&]*&grant_type=[^&]*)$"
+        "matches": "client_id=ae0a1bfa-f3e6-490a-b6d9-7a9ce4d0e551&client_secret=3a547506-9421-4c78-afad-ce94c54e4baa&grant_type=client_credentials"
       }
     ]
   },

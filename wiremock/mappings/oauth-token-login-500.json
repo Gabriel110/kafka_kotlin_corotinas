@@ -23,8 +23,8 @@
     ]
   },
   "response": {
-    "status": 400,
-    "body": "Bad Request: Required parameters missing",
+    "status": 500,
+    "body": "The server encountered an unexpected condition that prevented it from fulfilling the request.",
     "headers": {
       "Content-Type": "application/json"
     }
