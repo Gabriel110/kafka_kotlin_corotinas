@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/oauth/token",
+    "headers": {
+      "Content-Type": {
+        "equalTo": "application/x-www-form-urlencoded"
+      },
+      "x-gcs-apikey": {
+        "equalTo": "d97a2a44-7dec-4dcf-bcc7-3df1d41b7dd6"
+      },
+      "x-gcs-flowID": {
+        "matches": "^[a-fA-F0-9-]{36}$"
+      },
+      "x-gcs-correlationID": {
+        "matches": "^[a-fA-F0-9-]{36}$"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "matches": "client_id=ae0a1bfa-f3e6-490a-b6d9-7a9ce4d0e551&client_secret=(?!3a547506-9421-4c78-afad-ce94c54e4baa).+&grant_type=client_credentials"
+      }
+    ]
+  },
+  "response": {
+    "status": 403,
+    "body": "Authorization failed. User is not licensed to use this application.",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
