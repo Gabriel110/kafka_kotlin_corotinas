@@ -1,13 +1,10 @@
 package br.com.kafka.ecsabreconta.gateway.input.kafka
 
 import br.com.kafka.ecsabreconta.core.gateway.output.client.usecase.DadosPessoasService
-import br.com.kafka.ecsabreconta.core.gateway.output.client.usecase.impl.AuthServiceImp
-import br.com.kafka.ecsabreconta.core.usecase.DynamicCacheService
+import br.com.kafka.ecsabreconta.core.usecase.impl.DynamicCacheServiceImp
 import br.com.kafka.ecsabreconta.shared.exception.AuthClienteException
 import br.com.kafka.ecsabreconta.shared.exception.DadosClienteException
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.slf4j.Logger
@@ -20,8 +17,7 @@ import java.util.*
 @Component
 class KafkaMessageListener(
     private val dadosPessoasService: DadosPessoasService,
-    private val authServiceImp: AuthServiceImp,
-    private val dynamicCacheService: DynamicCacheService
+    private val dynamicCacheServiceImp: DynamicCacheServiceImp
 ) {
 
     private val logger: Logger = LoggerFactory.getLogger(KafkaMessageListener::class.java)
@@ -38,7 +34,7 @@ class KafkaMessageListener(
         withContext(Dispatchers.IO) {
             runCatching {
                 val dadosPessoalResponse = dadosPessoasService.getDados()
-                val getToken = dynamicCacheService.getJwt(
+                val getToken = dynamicCacheServiceImp.getJwt(
                     accessToken = "access_token",
                     "ae0a1bfa-f3e6-490a-b6d9-7a9ce4d0e551",
                     "3a547506-9421-4c78-afad-ce94c54e4baa"

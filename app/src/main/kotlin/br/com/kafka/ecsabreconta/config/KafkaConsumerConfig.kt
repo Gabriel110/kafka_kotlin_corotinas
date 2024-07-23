@@ -17,10 +17,10 @@ import org.springframework.kafka.listener.DefaultErrorHandler
 class KafkaConsumerConfig {
 
     @Value("\${spring.kafka.bootstrap-servers}")
-    private lateinit var bootstrapServers: String
+    lateinit var bootstrapServers: String
 
     @Value("\${spring.kafka.consumer.group-id}")
-    private lateinit var groupId: String
+    lateinit var groupId: String
 
     @Bean
     fun consumerConfigs(): Map<String, Any> {

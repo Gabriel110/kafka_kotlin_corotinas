@@ -38,8 +38,10 @@ class DadosPessoasServiceImpTest {
         `when`(call.execute()).thenReturn(response)
         `when`(dadosPessoalClient.getPessoa()).thenReturn(call)
 
-        assertFailsWith<DadosClienteException> {
+        val exception = assertFailsWith<DadosClienteException> {
             dadosPessoasServiceImp.getDados()
         }
+
+        assertEquals(exception.message.toString(), "API Error: StatusCode: 500, Error: Response.error(), Body: null")
     }
 }
