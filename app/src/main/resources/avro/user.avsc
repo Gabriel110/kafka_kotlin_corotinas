@@ -1,0 +1,9 @@
+{
+  "type": "record",
+  "name": "User",
+  "fields": [
+    {"name": "nome", "type": "string"},
+    {"name": "cpf", "type": "string"},
+    {"name": "data_nascimento", "type": "string"}
+  ]
+}
