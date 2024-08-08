@@ -1,7 +1,6 @@
 package br.com.kafka.ecsabreconta.config
 
-import br.com.kafka.ecsabreconta.core.doman.User
-import io.confluent.kafka.serializers.KafkaAvroSerializer
+import br.com.gabriel.usuario.EventoCriaUsuario
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.serialization.StringSerializer
 import org.springframework.beans.factory.annotation.Value
@@ -21,18 +20,18 @@ class KafkaProducerConfig(
 ) {
 
     @Bean
-    fun producerFactory(): ProducerFactory<String, User> {
+    fun producerFactory(): ProducerFactory<String, EventoCriaUsuario> {
         val configProps = mapOf(
             ProducerConfig.BOOTSTRAP_SERVERS_CONFIG to bootstrapServers,
             ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG to StringSerializer::class.java,
-            ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG to KafkaAvroSerializer::class.java,
+            ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG to AvroMessageSerializer::class.java,
             "schema.registry.url" to schemaRegistry
         )
         return DefaultKafkaProducerFactory(configProps)
     }
 
     @Bean
-    fun kafkaTemplate(): KafkaTemplate<String, User> {
+    fun kafkaTemplate(): KafkaTemplate<String, EventoCriaUsuario> {
         return KafkaTemplate(producerFactory())
     }
 }

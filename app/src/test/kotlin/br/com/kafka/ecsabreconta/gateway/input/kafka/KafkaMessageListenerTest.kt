@@ -3,19 +3,21 @@ package br.com.kafka.ecsabreconta.gateway.input.kafka
 import br.com.kafka.ecsabreconta.core.gateway.output.client.response.PessoaResponse
 import br.com.kafka.ecsabreconta.core.gateway.output.client.usecase.DadosPessoasService
 import br.com.kafka.ecsabreconta.core.usecase.impl.DynamicCacheServiceImp
+import br.com.kafka.ecsabreconta.gateway.output.kafka.Producer
 import br.com.kafka.ecsabreconta.shared.exception.AuthClienteException
 import br.com.kafka.ecsabreconta.shared.exception.DadosClienteException
 import kotlinx.coroutines.test.runTest
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.*
-import org.mockito.MockitoAnnotations
+import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.kafka.support.Acknowledgment
 
-
+@ExtendWith(MockitoExtension::class)
 class KafkaMessageListenerTest{
 
     @Mock
@@ -25,22 +27,21 @@ class KafkaMessageListenerTest{
     private lateinit var dadosPessoasService: DadosPessoasService
 
     @Mock
+    private lateinit var producer: Producer
+
+    @Mock
     private lateinit var dynamicCacheServiceImp: DynamicCacheServiceImp
 
     @InjectMocks
     private lateinit var kafkaMessageListener: KafkaMessageListener
 
-    @BeforeEach
-    fun setUp() {
-        MockitoAnnotations.openMocks(this)
-    }
 
     @Test
     fun `test successful message processing`() = runTest {
         `when`(dynamicCacheServiceImp.getJwt(
             anyString(),
             anyString(),
-            anyString()
+            anyString(),
         )).thenReturn("123")
         `when`(dadosPessoasService.getDados()).thenReturn(PessoaResponse(
             nome = "gabriel",
@@ -56,11 +57,6 @@ class KafkaMessageListenerTest{
 
     @Test
     fun `test DadosClienteException handling in message processing`() = runTest {
-        `when`(dynamicCacheServiceImp.getJwt(
-            anyString(),
-            anyString(),
-            anyString()
-        )).thenReturn("123")
         `when`(dadosPessoasService.getDados()).thenThrow(
             DadosClienteException(
                 message = "Forbidden",

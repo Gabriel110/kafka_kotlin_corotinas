@@ -2,6 +2,7 @@ package br.com.kafka.ecsabreconta.gateway.input.kafka
 
 import br.com.kafka.ecsabreconta.core.doman.User
 import br.com.kafka.ecsabreconta.core.gateway.output.client.usecase.DadosPessoasService
+import br.com.kafka.ecsabreconta.core.mapper.UserMapper
 import br.com.kafka.ecsabreconta.core.usecase.impl.DynamicCacheServiceImp
 import br.com.kafka.ecsabreconta.gateway.output.kafka.Producer
 import br.com.kafka.ecsabreconta.shared.exception.AuthClienteException
@@ -40,7 +41,7 @@ class KafkaMessageListener(
                 val getToken = dynamicCacheServiceImp.getJwt(
                     accessToken = "access_token",
                     "ae0a1bfa-f3e6-490a-b6d9-7a9ce4d0e551",
-                    "3a547506-9421-4c78-afad-ce94c54e4baa"
+                    "3a547506-9421-4c78-afad-ce94c54e4baa",
                 )
                 val user = User(
                     "gabriel",
@@ -50,7 +51,8 @@ class KafkaMessageListener(
                 logger.info(getToken.toString())
                 logger.info(dadosPessoalResponse.toString())
                 logger.info("Recebido: ${message.value()}")
-                producer.senMensagem("teste", user)
+
+                producer.senMensagem("meu-topic", user)
 
             }.onFailure { exception ->
                 when (exception) {
@@ -66,6 +68,7 @@ class KafkaMessageListener(
                     )
                 }
             }.onSuccess {
+                logger.info("sucess!")
                 acknowledgment.acknowledge()
             }
         }

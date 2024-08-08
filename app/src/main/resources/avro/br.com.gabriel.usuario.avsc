@@ -1,0 +1,28 @@
+{
+    "type": "record",
+    "name": "EventoCriaUsuario",
+    "namespace": "br.com.gabriel.usuario",
+    "fields": [
+        {
+            "name": "data",
+            "type": {
+                "type": "record",
+                "name": "EventoCriarUsuarioData",
+                "fields": [
+                    {
+                        "name": "nome",
+                        "type": "string"
+                    },
+                    {
+                        "name": "cpf",
+                        "type": "string"
+                    },
+                    {
+                        "name": "data_nascimento",
+                        "type": "string"
+                    }
+                ]
+            }
+        }
+    ]
+}

@@ -1,7 +1,10 @@
 package br.com.kafka.ecsabreconta.config
 
+import io.confluent.kafka.serializers.KafkaAvroSerializer
 import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.serialization.StringDeserializer
+import org.apache.kafka.common.serialization.StringSerializer
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -23,20 +26,18 @@ class KafkaConsumerConfig {
     lateinit var groupId: String
 
     @Bean
-    fun consumerConfigs(): Map<String, Any> {
-        val props = mutableMapOf<String, Any>()
-        props[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapServers
-        props[ConsumerConfig.GROUP_ID_CONFIG] = groupId
-        props[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
-        props[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
-        ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG to false
-        return props
+    fun consumerFactory(): ConsumerFactory<String, String> {
+        val configProps = mapOf(
+            ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG to bootstrapServers,
+            ConsumerConfig.GROUP_ID_CONFIG to groupId,
+            ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.java,
+            ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.java,
+            ConsumerConfig.AUTO_OFFSET_RESET_CONFIG to "earliest",
+            ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG to false
+        )
+        return DefaultKafkaConsumerFactory(configProps)
     }
 
-    @Bean
-    fun consumerFactory(): ConsumerFactory<String, String> {
-        return DefaultKafkaConsumerFactory(consumerConfigs())
-    }
 
     @Bean
     fun kafkaListenerContainerFactory(): ConcurrentKafkaListenerContainerFactory<String, String> {

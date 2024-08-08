@@ -31,15 +31,6 @@ class KafkaConsumerConfigTest {
     }
 
     @Test
-    fun testConsumerConfigs() {
-        val configs = kafkaConsumerConfig.consumerConfigs()
-        assertEquals("localhost:9092", configs[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG])
-        assertEquals("test-group", configs[ConsumerConfig.GROUP_ID_CONFIG])
-        assertEquals(StringDeserializer::class.java, configs[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG])
-        assertEquals(StringDeserializer::class.java, configs[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG])
-    }
-
-    @Test
     fun testConsumerFactory() {
         val consumerFactory = kafkaConsumerConfig.consumerFactory()
         assertEquals(DefaultKafkaConsumerFactory::class.java, consumerFactory::class.java)
